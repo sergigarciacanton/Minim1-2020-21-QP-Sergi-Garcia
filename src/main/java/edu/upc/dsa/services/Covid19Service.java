@@ -50,12 +50,14 @@ public class Covid19Service {
         if (vaccine.getTrademark()==null || vaccine.getDate()==null|| vaccine.getUser_id()==null)  return Response.status(500).entity(vaccine).build();
         this.scenario.applyVaccine(vaccine);
         return Response.status(201).entity(vaccine).build();
+
+        //return Response.status(201).entity(new Gson().toJson(vaccine)).build(); //Solucion cutre, mejor evitar. Preguntar a Toni
     }
 
     @GET
     @ApiOperation(value = "Get vaccines by trademark", notes = "Get vaccines by trademark")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = Vaccine.class),
+            @ApiResponse(code = 201, message = "Successful", response = Vaccine.class, responseContainer="List"),
             @ApiResponse(code = 404, message = "There are no vaccines applied")
     })
     @Path("/vaccinesByTrademark/")
@@ -64,6 +66,8 @@ public class Covid19Service {
         List<Vaccine> list = scenario.getVaccinesByTrademark();
         if (list == null) return Response.status(404).build();
         else  return Response.status(201).entity(list).build();
+
+        //else return Response.status(201).entity(new Gson().toJson(list)).build(); //Solucion cutre, mejor evitar. Preguntar a Toni
     }
 
     @GET
@@ -78,6 +82,8 @@ public class Covid19Service {
         Trademark[] trademarks = scenario.getTrademarksByAppliedVaccines();
         if (trademarks == null) return Response.status(404).build();
         else  return Response.status(201).entity(trademarks).build();
+
+        //else return Response.status(201).entity(new Gson().toJson(trademarks)).build(); //Solucion cutre, mejor evitar. Preguntar a Toni
     }
 
     @POST
@@ -87,20 +93,21 @@ public class Covid19Service {
             @ApiResponse(code = 500, message = "Validation Error")
 
     })
-
     @Path("/tracing/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response newTracing(Tracing tracing) {
 
         if (tracing.getDescription()==null || tracing.getDate()==null|| tracing.getUser_id()==null)  return Response.status(500).entity(tracing).build();
         this.scenario.addTracing(tracing);
-        return Response.status(201).entity(tracing).build();
+        return Response.status(201).entity(tracing).build(); //Peta, no convierte respuesta a JSON
+
+        //return Response.status(201).entity(new Gson().toJson(tracing)).build(); //Solucion cutre, mejor evitar. Preguntar a Toni
     }
 
     @GET
     @ApiOperation(value = "Get tracings for user", notes = "Get tracings for user")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = Tracing.class),
+            @ApiResponse(code = 201, message = "Successful", response = Tracing.class, responseContainer="List"),
             @ApiResponse(code = 404, message = "No trademarks found")
     })
     @Path("/tracingsForUser/{id}")
@@ -109,5 +116,7 @@ public class Covid19Service {
         List<Tracing> list = scenario.getTracingsForUser(id);
         if (list == null) return Response.status(404).build();
         else  return Response.status(201).entity(list).build();
+
+        //else return Response.status(201).entity(new Gson().toJson(list)).build(); //Solucion cutre, mejor evitar. Preguntar a Toni
     }
 }
